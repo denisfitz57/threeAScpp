@@ -2,12 +2,12 @@ cmake_minimum_required(VERSION 3.17)
 project(ThreeAS)
 set(OPENFRAMEWORKS_ROOT /Users/basset/Downloads/of_v0.11.0_osx_release)
 set(OPENFRAMEWORKS_LIBS ${OPENFRAMEWORKS_ROOT}/libs)
-add_executable(main
+add_executable(ThreeAS MACOSX_BUNDLE
     src/main.cpp
     src/ofApp.cpp
     ${OPENFRAMEWORKS_ROOT}/addons/ofxCsv-0.2.1/src/ofxCsv.cpp
     ${OPENFRAMEWORKS_ROOT}/addons/ofxCsv-0.2.1/src/ofxCsvRow.cpp)
-target_include_directories(main PRIVATE
+target_include_directories(ThreeAS PRIVATE
     ${OPENFRAMEWORKS_ROOT}/addons/ofxCsv-0.2.1/src
     ${OPENFRAMEWORKS_LIBS}/glew/include
     ${OPENFRAMEWORKS_LIBS}/tess2/include
@@ -39,7 +39,7 @@ find_library(APP_KIT AppKit)
 find_library(SECURITY Security)
 find_library(LDAP_LIB LDAP)
 find_library(OPEN_GL OpenGL)
-target_link_libraries(main
+target_link_libraries(ThreeAS
     ${OPENFRAMEWORKS_LIBS}/openFrameworksCompiled/lib/osx/openFrameworks.a
     ${OPENFRAMEWORKS_LIBS}/glfw/lib/osx/glfw3.a
     ${OPENFRAMEWORKS_LIBS}/glew/lib/osx/glew.a
@@ -63,3 +63,20 @@ target_link_libraries(main
     ${SECURITY}
     ${LDAP_LIB}
     ${OPEN_GL})
+    
+install(TARGETS ThreeAS
+    BUNDLE DESTINATION . COMPONENT Runtime
+    RUNTIME DESTINATION bin COMPONENT Runtime
+)
+
+# Note Mac specific extension .app
+set(APPS "\${CMAKE_INSTALL_PREFIX}/ThreeAS.app")
+
+# Directories to look for dependencies
+set(DIRS ${OPENFRAMEWORKS_LIBS}/fmodex/lib/osx)
+
+install(CODE "include(BundleUtilities)
+    fixup_bundle(\"${APPS}\" \"\" \"${DIRS}\")")
+
+set(CPACK_GENERATOR "DRAGNDROP")
+include(CPack)
