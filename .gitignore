@@ -88,3 +88,9 @@ Desktop.ini
 
 # Android
 .csettings
+
+.clangd/
+.vscode/
+.clang-format
+.clang-tidy
+compile_commands.json
