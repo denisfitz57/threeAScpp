@@ -63,10 +63,10 @@ target_link_libraries(ThreeAS
     ${SECURITY}
     ${LDAP_LIB}
     ${OPEN_GL})
-    
+
+set(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR}/bin)
 install(TARGETS ThreeAS
     BUNDLE DESTINATION . COMPONENT Runtime
-    RUNTIME DESTINATION bin COMPONENT Runtime
 )
 
 # Note Mac specific extension .app
@@ -75,8 +75,10 @@ set(APPS "\${CMAKE_INSTALL_PREFIX}/ThreeAS.app")
 # Directories to look for dependencies
 set(DIRS ${OPENFRAMEWORKS_LIBS}/fmodex/lib/osx)
 
-install(CODE "include(BundleUtilities)
-    fixup_bundle(\"${APPS}\" \"\" \"${DIRS}\")")
+install(CODE "
+    include(BundleUtilities)
+    fixup_bundle(\"${APPS}\" \"\" \"${DIRS}\")
+")
 
 set(CPACK_GENERATOR "DRAGNDROP")
 include(CPack)
