@@ -12,7 +12,9 @@ int main() {
             {taskFrameUpdateAfterSpacebarDoesNotShowInstructions,
                 "taskFrameUpdateAfterSpacebarDoesNotShowInstructions"},
             {timerConstructorSubscribesToFrameUpdate,
-                "timerConstructorSubscribesToFrameUpdate"}},
+                "timerConstructorSubscribesToFrameUpdate"},
+            {timerInvokeAfterCallsbackWhenTime,
+                "timerInvokeAfterCallsbackWhenTime"}},
         std::cout);
 }
 }
