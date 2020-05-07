@@ -1,5 +1,6 @@
 #include "Timer.hpp"
 #include "threeAS-timer.hpp"
+#include <functional>
 
 namespace three_as {
 namespace {
@@ -7,7 +8,7 @@ class ScreenStub : public Screen {
   public:
     auto listener() -> Listener * { return listener_; }
 
-    void subscribe(Listener *s) { listener_ = s; }
+    void subscribe(Listener *s) override { listener_ = s; }
 
     void frameUpdate() { listener_->frameUpdate(); }
 
@@ -24,22 +25,31 @@ class MonotonicTimerStub : public MonotonicTimer {
   private:
     std::chrono::milliseconds elapsed_{};
 };
-}
-void timerConstructorSubscribesToFrameUpdate(testcpplite::TestResult &result) {
+
+void testTimer(
+    const std::function<void(Timer &, ScreenStub &, MonotonicTimerStub &)> &f) {
     ScreenStub screen;
     MonotonicTimerStub monotonic;
     Timer timer{screen, monotonic};
-    assertTrue(result, &timer == screen.listener());
+    f(timer, screen, monotonic);
+}
+}
+
+void timerConstructorSubscribesToFrameUpdate(testcpplite::TestResult &result) {
+    testTimer([&](Timer &timer, ScreenStub &screen, MonotonicTimerStub &) {
+        assertTrue(result, &timer == screen.listener());
+    });
 }
 
 void timerInvokeAfterCallsbackWhenTime(testcpplite::TestResult &result) {
-    ScreenStub screen;
-    MonotonicTimerStub monotonic;
-    Timer timer{screen, monotonic};
-    bool called{};
-    timer.invokeAfter(std::chrono::milliseconds{1}, [&]() { called = true; });
-    monotonic.setElapsed(std::chrono::milliseconds{1});
-    screen.frameUpdate();
-    assertTrue(result, called);
+    testTimer(
+        [&](Timer &timer, ScreenStub &screen, MonotonicTimerStub &monotonic) {
+            bool called{};
+            timer.invokeAfter(
+                std::chrono::milliseconds{1}, [&]() { called = true; });
+            monotonic.setElapsed(std::chrono::milliseconds{1});
+            screen.frameUpdate();
+            assertTrue(result, called);
+        });
 }
 }
