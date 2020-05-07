@@ -3,7 +3,6 @@
 
 #include <chrono>
 #include <functional>
-#include <utility>
 
 namespace three_as {
 class Screen {
@@ -26,13 +25,9 @@ class MonotonicTimer {
 
 class Timer : public Screen::Listener {
   public:
-    Timer(Screen &screen, MonotonicTimer &) { screen.subscribe(this); }
-
-    void frameUpdate() override { callback(); }
-
-    void invokeAfter(std::chrono::milliseconds, std::function<void()> f) {
-        callback = std::move(f);
-    }
+    Timer(Screen &, MonotonicTimer &);
+    void frameUpdate() override;
+    void invokeAfter(std::chrono::milliseconds, std::function<void()>);
 
   private:
     std::function<void()> callback{};
