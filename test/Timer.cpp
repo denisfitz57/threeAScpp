@@ -28,7 +28,7 @@ class MonotonicTimerStub : public MonotonicTimer {
 
     auto started() const -> bool { return started_; }
 
-    void start() { started_ = true; }
+    void start() override { started_ = true; }
 
   private:
     std::chrono::milliseconds elapsed_{};
