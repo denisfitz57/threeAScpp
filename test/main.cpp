@@ -9,7 +9,12 @@ class FrameworkStub : public Framework {
 
     void eventLoop() override { eventLoopEntered_ = true; }
 
+    auto displayedText() -> std::string { return displayedText_; }
+
+    void display(const std::string &s) { displayedText_ = s; }
+
   private:
+    std::string displayedText_;
     bool eventLoopEntered_{};
 };
 
@@ -17,6 +22,12 @@ void taskEntersEventLoop(testcpplite::TestResult &result) {
     FrameworkStub framework;
     runTask(framework);
     assertTrue(result, framework.eventLoopEntered());
+}
+
+void frameUpdateShowsInstructions(testcpplite::TestResult &result) {
+    FrameworkStub framework;
+    frameUpdate(framework);
+    assertEqual(result, instructions, framework.displayedText());
 }
 }
 }
@@ -27,7 +38,9 @@ void taskEntersEventLoop(testcpplite::TestResult &result) {
 namespace three_as {
 int main() {
     return testcpplite::test(
-        {{taskEntersEventLoop, "taskEntersEventLoop"}}, std::cout);
+        {{taskEntersEventLoop, "taskEntersEventLoop"},
+            {frameUpdateShowsInstructions, "frameUpdateShowsInstructions"}},
+        std::cout);
 }
 }
 
