@@ -11,7 +11,7 @@ class FrameworkStub : public Framework {
 
     auto displayedText() -> std::string { return displayedText_; }
 
-    void display(const std::string &s) { displayedText_ = s; }
+    void display(const std::string &s) override { displayedText_ = s; }
 
   private:
     std::string displayedText_;
