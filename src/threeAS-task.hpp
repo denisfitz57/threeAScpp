@@ -15,8 +15,15 @@ class Framework {
     virtual void display(const std::string &) = 0;
 };
 
-void runTask(Framework &);
-void frameUpdate(Framework &);
+class Task {
+  public:
+    void runTask(Framework &);
+    void frameUpdate(Framework &);
+    void keyPressed(Framework &, int key);
+
+  private:
+    bool keyPressed_{};
+};
 }
 
 #endif
