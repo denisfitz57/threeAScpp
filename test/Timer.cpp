@@ -1,6 +1,9 @@
 #include "Timer.hpp"
 #include "threeAS-timer.hpp"
 #include <functional>
+#include <chrono>
+
+using std::literals::chrono_literals::operator""ms;
 
 namespace three_as {
 namespace {
@@ -20,7 +23,7 @@ class MonotonicTimerStub : public MonotonicTimer {
   public:
     void setElapsed(std::chrono::milliseconds t) { elapsed_ = t; }
 
-    auto elapsed() -> std::chrono::milliseconds { return elapsed_; }
+    auto elapsed() -> std::chrono::milliseconds override { return elapsed_; }
 
   private:
     std::chrono::milliseconds elapsed_{};
@@ -33,6 +36,16 @@ void testTimer(
     Timer timer{screen, monotonic};
     f(timer, screen, monotonic);
 }
+
+auto timerCallsAfterWhenElapsed(Timer &timer, ScreenStub &screen,
+    MonotonicTimerStub &monotonic, std::chrono::milliseconds after,
+    std::chrono::milliseconds elapsed) -> bool {
+    bool called{};
+    timer.invokeAfter(after, [&]() { called = true; });
+    monotonic.setElapsed(elapsed);
+    screen.frameUpdate();
+    return called;
+}
 }
 
 void timerConstructorSubscribesToFrameUpdate(testcpplite::TestResult &result) {
@@ -44,24 +57,17 @@ void timerConstructorSubscribesToFrameUpdate(testcpplite::TestResult &result) {
 void timerInvokeAfterCallsbackWhenTime(testcpplite::TestResult &result) {
     testTimer(
         [&](Timer &timer, ScreenStub &screen, MonotonicTimerStub &monotonic) {
-            bool called{};
-            timer.invokeAfter(
-                std::chrono::milliseconds{1}, [&]() { called = true; });
-            monotonic.setElapsed(std::chrono::milliseconds{1});
-            screen.frameUpdate();
-            assertTrue(result, called);
+            assertTrue(result,
+                timerCallsAfterWhenElapsed(timer, screen, monotonic, 1ms, 1ms));
         });
 }
 
-void timerInvokeAfterDoesNotCallsbackWhenNotTime(testcpplite::TestResult &result) {
+void timerInvokeAfterDoesNotCallsbackWhenNotTime(
+    testcpplite::TestResult &result) {
     testTimer(
         [&](Timer &timer, ScreenStub &screen, MonotonicTimerStub &monotonic) {
-            bool called{};
-            timer.invokeAfter(
-                std::chrono::milliseconds{2}, [&]() { called = true; });
-            monotonic.setElapsed(std::chrono::milliseconds{1});
-            screen.frameUpdate();
-            assertFalse(result, called);
+            assertFalse(result,
+                timerCallsAfterWhenElapsed(timer, screen, monotonic, 2ms, 1ms));
         });
 }
 }
