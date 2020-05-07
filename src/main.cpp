@@ -7,10 +7,12 @@ namespace {
 class OpenFrameworks : public Framework {
   public:
     OpenFrameworks() {
+        ofSetupOpenGL(1920, 1080, OF_WINDOW);
         verdana14.load("verdana.ttf", 14, true, true);
         verdana14.setLineHeight(18.0f);
         verdana14.setLetterSpacing(1.037);
     }
+
     void eventLoop() override { ofRunApp(new ofApp()); }
 
     void display(const std::string &s) override {
@@ -25,17 +27,10 @@ class OpenFrameworks : public Framework {
 
 void main() {
     OpenFrameworks framework;
-    run(framework);
+    Task task{framework};
+    task.run();
 }
 }
 }
 
-//========================================================================
-int main() {
-    ofSetupOpenGL(1920, 1080, OF_WINDOW); // <-------- setup the GL context
-
-    // this kicks off the running of my app
-    // can be OF_WINDOW or OF_FULLSCREEN
-    // pass in width and height too:
-    three_as::main();
-}
+int main() { three_as::main(); }
