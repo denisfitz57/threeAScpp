@@ -1,7 +1,7 @@
 #ifndef THREEAS_STEADYCLOCK_HPP_
 #define THREEAS_STEADYCLOCK_HPP_
 
-#include "threeAS-timer.hpp"
+#include "threeAS-Timer.hpp"
 #include <chrono>
 
 namespace three_as {

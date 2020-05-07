@@ -1,5 +1,5 @@
 #include "Timer.hpp"
-#include "threeAS-timer.hpp"
+#include "threeAS-Timer.hpp"
 #include <functional>
 #include <chrono>
 #include <utility>
