@@ -21,6 +21,7 @@ struct Interval {};
 class MonotonicTimer {
   public:
     virtual ~MonotonicTimer() = default;
+    virtual auto elapsed() -> std::chrono::milliseconds = 0;
 };
 
 class Timer : public Screen::Listener {
@@ -31,6 +32,8 @@ class Timer : public Screen::Listener {
 
   private:
     std::function<void()> callback{};
+    std::chrono::milliseconds timeTillCallback;
+    MonotonicTimer &monotonic;
 };
 }
 

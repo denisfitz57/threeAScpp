@@ -6,6 +6,7 @@
 namespace three_as {
 void timerConstructorSubscribesToFrameUpdate(testcpplite::TestResult &);
 void timerInvokeAfterCallsbackWhenTime(testcpplite::TestResult &);
+void timerInvokeAfterDoesNotCallsbackWhenNotTime(testcpplite::TestResult &);
 }
 
 #endif

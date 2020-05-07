@@ -52,4 +52,16 @@ void timerInvokeAfterCallsbackWhenTime(testcpplite::TestResult &result) {
             assertTrue(result, called);
         });
 }
+
+void timerInvokeAfterDoesNotCallsbackWhenNotTime(testcpplite::TestResult &result) {
+    testTimer(
+        [&](Timer &timer, ScreenStub &screen, MonotonicTimerStub &monotonic) {
+            bool called{};
+            timer.invokeAfter(
+                std::chrono::milliseconds{2}, [&]() { called = true; });
+            monotonic.setElapsed(std::chrono::milliseconds{1});
+            screen.frameUpdate();
+            assertFalse(result, called);
+        });
+}
 }

@@ -14,7 +14,9 @@ int main() {
             {timerConstructorSubscribesToFrameUpdate,
                 "timerConstructorSubscribesToFrameUpdate"},
             {timerInvokeAfterCallsbackWhenTime,
-                "timerInvokeAfterCallsbackWhenTime"}},
+                "timerInvokeAfterCallsbackWhenTime"},
+            {timerInvokeAfterDoesNotCallsbackWhenNotTime,
+                "timerInvokeAfterDoesNotCallsbackWhenNotTime"}},
         std::cout);
 }
 }
