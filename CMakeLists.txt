@@ -1,9 +1,12 @@
 cmake_minimum_required(VERSION 3.17)
 project(threeAS)
 
-add_library(threeAS src/task.cpp src/timer.cpp)
+add_library(threeAS src/task.cpp src/Timer.cpp src/SteadyClock.cpp)
 set_target_properties(threeAS PROPERTIES OUTPUT_NAME "threeAS")
-target_include_directories(threeAS PUBLIC src PRIVATE src)
+target_include_directories(
+  threeAS
+  PUBLIC src
+  PRIVATE src)
 
 if(${WITH_TESTS})
   set(WITH_TESTS OFF)
