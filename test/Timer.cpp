@@ -70,4 +70,12 @@ void timerInvokeAfterDoesNotCallsbackWhenNotTime(
                 timerCallsAfterWhenElapsed(timer, screen, monotonic, 2ms, 1ms));
         });
 }
+
+void timerInvokeAfterCallsbackWhenPastTime(testcpplite::TestResult &result) {
+    testTimer(
+        [&](Timer &timer, ScreenStub &screen, MonotonicTimerStub &monotonic) {
+            assertTrue(result,
+                timerCallsAfterWhenElapsed(timer, screen, monotonic, 1ms, 2ms));
+        });
+}
 }

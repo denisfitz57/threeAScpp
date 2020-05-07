@@ -16,7 +16,9 @@ int main() {
             {timerInvokeAfterCallsbackWhenTime,
                 "timerInvokeAfterCallsbackWhenTime"},
             {timerInvokeAfterDoesNotCallsbackWhenNotTime,
-                "timerInvokeAfterDoesNotCallsbackWhenNotTime"}},
+                "timerInvokeAfterDoesNotCallsbackWhenNotTime"},
+            {timerInvokeAfterCallsbackWhenPastTime,
+                "timerInvokeAfterCallsbackWhenPastTime"}},
         std::cout);
 }
 }

@@ -7,7 +7,7 @@ Timer::Timer(Screen &screen, MonotonicTimer &monotonic) : monotonic{monotonic} {
 }
 
 void Timer::frameUpdate() {
-    if (monotonic.elapsed() == timeToWait)
+    if (monotonic.elapsed() >= timeToWait)
         callback();
 }
 
