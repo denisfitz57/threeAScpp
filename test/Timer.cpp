@@ -26,8 +26,13 @@ class MonotonicTimerStub : public MonotonicTimer {
 
     auto elapsed() -> std::chrono::milliseconds override { return elapsed_; }
 
+    auto started() const -> bool { return started_; }
+
+    void start() { started_ = true; }
+
   private:
     std::chrono::milliseconds elapsed_{};
+    bool started_{};
 };
 
 void testTimer(
@@ -101,5 +106,12 @@ void timerInvokeAfterDoesNotCallsbackTwice(testcpplite::TestResult &result) {
             frameUpdate(screen);
             assertEqual(result, 1, count);
         });
+}
+
+void timerInvokeAfterStartsMonotonic(testcpplite::TestResult &result) {
+    testTimer([&](Timer &timer, ScreenStub &, MonotonicTimerStub &monotonic) {
+        invokeAfter(timer, {}, {});
+        assertTrue(result, monotonic.started());
+    });
 }
 }

@@ -20,7 +20,9 @@ int main() {
             {timerInvokeAfterCallsbackWhenPastTime,
                 "timerInvokeAfterCallsbackWhenPastTime"},
             {timerInvokeAfterDoesNotCallsbackTwice,
-                "timerInvokeAfterDoesNotCallsbackTwice"}},
+                "timerInvokeAfterDoesNotCallsbackTwice"},
+            {timerInvokeAfterStartsMonotonic,
+                "timerInvokeAfterStartsMonotonic"}},
         std::cout);
 }
 }

@@ -22,6 +22,7 @@ class MonotonicTimer {
   public:
     virtual ~MonotonicTimer() = default;
     virtual auto elapsed() -> std::chrono::milliseconds = 0;
+    virtual void start() = 0;
 };
 
 class Timer : public Screen::Listener {

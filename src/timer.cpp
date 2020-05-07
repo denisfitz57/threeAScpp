@@ -14,6 +14,7 @@ void Timer::frameUpdate() {
 }
 
 void Timer::invokeAfter(std::chrono::milliseconds t, std::function<void()> f) {
+    monotonic.start();
     timeToWait = t;
     callback = std::move(f);
     running = true;
