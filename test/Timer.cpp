@@ -78,4 +78,16 @@ void timerInvokeAfterCallsbackWhenPastTime(testcpplite::TestResult &result) {
                 timerCallsAfterWhenElapsed(timer, screen, monotonic, 1ms, 2ms));
         });
 }
+
+void timerInvokeAfterDoesNotCallsbackTwice(testcpplite::TestResult &result) {
+    testTimer(
+        [&](Timer &timer, ScreenStub &screen, MonotonicTimerStub &monotonic) {
+            int count{};
+            timer.invokeAfter(1ms, [&]() { ++count; });
+            monotonic.setElapsed(1ms);
+            screen.frameUpdate();
+            screen.frameUpdate();
+            assertEqual(result, 1, count);
+        });
+}
 }

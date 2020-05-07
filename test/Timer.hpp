@@ -8,6 +8,7 @@ void timerConstructorSubscribesToFrameUpdate(testcpplite::TestResult &);
 void timerInvokeAfterCallsbackWhenTime(testcpplite::TestResult &);
 void timerInvokeAfterDoesNotCallsbackWhenNotTime(testcpplite::TestResult &);
 void timerInvokeAfterCallsbackWhenPastTime(testcpplite::TestResult &);
+void timerInvokeAfterDoesNotCallsbackTwice(testcpplite::TestResult &);
 }
 
 #endif

@@ -34,6 +34,7 @@ class Timer : public Screen::Listener {
     std::function<void()> callback{};
     std::chrono::milliseconds timeToWait{};
     MonotonicTimer &monotonic;
+    bool running{};
 };
 }
 
