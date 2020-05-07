@@ -32,7 +32,7 @@ class Timer : public Screen::Listener {
 
   private:
     std::function<void()> callback{};
-    std::chrono::milliseconds timeTillCallback;
+    std::chrono::milliseconds timeToWait{};
     MonotonicTimer &monotonic;
 };
 }

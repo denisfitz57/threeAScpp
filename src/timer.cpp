@@ -7,12 +7,12 @@ Timer::Timer(Screen &screen, MonotonicTimer &monotonic) : monotonic{monotonic} {
 }
 
 void Timer::frameUpdate() {
-    if (monotonic.elapsed() == timeTillCallback)
+    if (monotonic.elapsed() == timeToWait)
         callback();
 }
 
 void Timer::invokeAfter(std::chrono::milliseconds t, std::function<void()> f) {
-    timeTillCallback = t;
+    timeToWait = t;
     callback = std::move(f);
 }
 }
