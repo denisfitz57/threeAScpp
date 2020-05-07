@@ -1,5 +1,6 @@
 #include "threeAS-task.hpp"
 #include <testcpplite/testcpplite.hpp>
+#include <functional>
 
 namespace three_as {
 namespace {
@@ -26,35 +27,37 @@ class FrameworkStub : public Framework {
 
 void run(Task &task) { task.run(); }
 
-void frameUpdate(Task &task) {
-    task.frameUpdate();
-}
+void frameUpdate(Task &task) { task.frameUpdate(); }
 
-void keyPressed(Task &task, int key) {
-    task.keyPressed(key);
+void keyPressed(Task &task, int key) { task.keyPressed(key); }
+
+void testTask(const std::function<void(Task &, FrameworkStub &)> &f) {
+    FrameworkStub framework;
+    Task task{framework};
+    f(task, framework);
 }
 
 void taskEntersEventLoop(testcpplite::TestResult &result) {
-    FrameworkStub framework;
-    Task task{framework};
-    run(task);
-    assertTrue(result, framework.eventLoopEntered());
+    testTask([&](Task &task, FrameworkStub &framework) {
+        run(task);
+        assertTrue(result, framework.eventLoopEntered());
+    });
 }
 
 void frameUpdateShowsInstructions(testcpplite::TestResult &result) {
-    FrameworkStub framework;
-    Task task{framework};
-    frameUpdate(task);
-    assertEqual(result, instructions, framework.displayedText());
+    testTask([&](Task &task, FrameworkStub &framework) {
+        frameUpdate(task);
+        assertEqual(result, instructions, framework.displayedText());
+    });
 }
 
 void frameUpdateAfterSpacebarDoesNotShowInstructions(
     testcpplite::TestResult &result) {
-    FrameworkStub framework;
-    Task task{framework};
-    keyPressed(task, ' ');
-    frameUpdate(task);
-    assertFalse(result, framework.textDisplayed());
+    testTask([&](Task &task, FrameworkStub &framework) {
+        keyPressed(task, ' ');
+        frameUpdate(task);
+        assertFalse(result, framework.textDisplayed());
+    });
 }
 }
 }
