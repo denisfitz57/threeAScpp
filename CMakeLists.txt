@@ -64,6 +64,7 @@ find_library(LDAP_LIB LDAP)
 find_library(OPEN_GL OpenGL)
 target_link_libraries(
   main
+  threeAS
   ${OPENFRAMEWORKS_LIBS}/openFrameworksCompiled/lib/osx/openFrameworks.a
   ${OPENFRAMEWORKS_LIBS}/glfw/lib/osx/glfw3.a
   ${OPENFRAMEWORKS_LIBS}/glew/lib/osx/glew.a
