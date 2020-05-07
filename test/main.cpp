@@ -9,7 +9,9 @@ int main() {
         {{taskEntersEventLoop, "taskEntersEventLoop"},
             {frameUpdateShowsInstructions, "frameUpdateShowsInstructions"},
             {frameUpdateAfterSpacebarDoesNotShowInstructions,
-                "frameUpdateAfterSpacebarDoesNotShowInstructions"}},
+                "frameUpdateAfterSpacebarDoesNotShowInstructions"},
+            {timerConstructorSubscribesToFrameUpdate,
+                "timerConstructorSubscribesToFrameUpdate"}},
         std::cout);
 }
 }
