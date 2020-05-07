@@ -2,6 +2,7 @@
 #include "threeAS-timer.hpp"
 #include <functional>
 #include <chrono>
+#include <utility>
 
 using std::literals::chrono_literals::operator""ms;
 
@@ -37,13 +38,24 @@ void testTimer(
     f(timer, screen, monotonic);
 }
 
+void frameUpdate(ScreenStub &s) { s.frameUpdate(); }
+
+void invokeAfter(
+    Timer &timer, std::chrono::milliseconds s, std::function<void()> f) {
+    timer.invokeAfter(s, std::move(f));
+}
+
+void setElapsed(MonotonicTimerStub &monotonic, std::chrono::milliseconds s) {
+    monotonic.setElapsed(s);
+}
+
 auto timerCallsAfterWhenElapsed(Timer &timer, ScreenStub &screen,
     MonotonicTimerStub &monotonic, std::chrono::milliseconds after,
     std::chrono::milliseconds elapsed) -> bool {
     bool called{};
-    timer.invokeAfter(after, [&]() { called = true; });
-    monotonic.setElapsed(elapsed);
-    screen.frameUpdate();
+    invokeAfter(timer, after, [&]() { called = true; });
+    setElapsed(monotonic, elapsed);
+    frameUpdate(screen);
     return called;
 }
 }
@@ -83,10 +95,10 @@ void timerInvokeAfterDoesNotCallsbackTwice(testcpplite::TestResult &result) {
     testTimer(
         [&](Timer &timer, ScreenStub &screen, MonotonicTimerStub &monotonic) {
             int count{};
-            timer.invokeAfter(1ms, [&]() { ++count; });
-            monotonic.setElapsed(1ms);
-            screen.frameUpdate();
-            screen.frameUpdate();
+            invokeAfter(timer, 1ms, [&]() { ++count; });
+            setElapsed(monotonic, 1ms);
+            frameUpdate(screen);
+            frameUpdate(screen);
             assertEqual(result, 1, count);
         });
 }
