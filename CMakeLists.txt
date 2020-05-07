@@ -1,11 +1,28 @@
 cmake_minimum_required(VERSION 3.17)
-project(ThreeAS)
+project(threeAS)
+
+add_library(threeAS src/task.cpp)
+set_target_properties(threeAS PROPERTIES OUTPUT_NAME "threeAS")
+target_include_directories(threeAS PUBLIC src PRIVATE src)
+
+if(${WITH_TESTS})
+  set(WITH_TESTS OFF)
+  include(FetchContent)
+  FetchContent_Declare(
+    testcpplite
+    GIT_REPOSITORY https://github.com/sbash64/testcpplite
+    GIT_TAG v1.1.3)
+  FetchContent_MakeAvailable(testcpplite)
+  add_subdirectory(test)
+endif()
+
 set(OPENFRAMEWORKS_ROOT /Users/basset/Downloads/of_v0.11.0_osx_release)
 set(OPENFRAMEWORKS_CSV_ROOT ${OPENFRAMEWORKS_ROOT}/addons/ofxCsv-0.2.1)
 add_executable(
-  ThreeAS MACOSX_BUNDLE
+  main MACOSX_BUNDLE
   src/main.cpp src/ofApp.cpp ${OPENFRAMEWORKS_CSV_ROOT}/src/ofxCsv.cpp
   ${OPENFRAMEWORKS_CSV_ROOT}/src/ofxCsvRow.cpp)
+set_target_properties(main PROPERTIES OUTPUT_NAME "threeAS")
 set(OPENFRAMEWORKS_LIBS ${OPENFRAMEWORKS_ROOT}/libs)
 set(OPENFRAMEWORKS_GLEW ${OPENFRAMEWORKS_LIBS}/glew)
 set(OPENFRAMEWORKS_TESS2 ${OPENFRAMEWORKS_LIBS}/tess2)
@@ -13,7 +30,7 @@ set(OPENFRAMEWORKS_BOOST ${OPENFRAMEWORKS_LIBS}/boost)
 set(OPENFRAMEWORKS_CAIRO ${OPENFRAMEWORKS_LIBS}/cairo)
 set(OPENFRAMEWORKS_CORE ${OPENFRAMEWORKS_LIBS}/openFrameworks)
 target_include_directories(
-  ThreeAS
+  main
   PRIVATE ${OPENFRAMEWORKS_CSV_ROOT}/src
           ${OPENFRAMEWORKS_LIBS}/glew/include
           ${OPENFRAMEWORKS_TESS2}/include
@@ -46,7 +63,7 @@ find_library(SECURITY Security)
 find_library(LDAP_LIB LDAP)
 find_library(OPEN_GL OpenGL)
 target_link_libraries(
-  ThreeAS
+  main
   ${OPENFRAMEWORKS_LIBS}/openFrameworksCompiled/lib/osx/openFrameworks.a
   ${OPENFRAMEWORKS_LIBS}/glfw/lib/osx/glfw3.a
   ${OPENFRAMEWORKS_LIBS}/glew/lib/osx/glew.a
@@ -73,11 +90,11 @@ target_link_libraries(
 
 # https://stackoverflow.com/a/17988981
 set(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR}/bin)
-install(TARGETS ThreeAS BUNDLE DESTINATION . COMPONENT Runtime)
+install(TARGETS main BUNDLE DESTINATION . COMPONENT Runtime)
 install(
   CODE "
     include(BundleUtilities)
     fixup_bundle(
-        \"${CMAKE_INSTALL_PREFIX}/ThreeAS.app\" \"\"
+        \"${CMAKE_INSTALL_PREFIX}/threeAS.app\" \"\"
         \"${OPENFRAMEWORKS_LIBS}/fmodex/lib/osx\")
 ")
