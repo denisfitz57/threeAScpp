@@ -6,10 +6,11 @@
 namespace three_as {
 int main() {
     return testcpplite::test(
-        {{taskEntersEventLoop, "taskEntersEventLoop"},
-            {frameUpdateShowsInstructions, "frameUpdateShowsInstructions"},
-            {frameUpdateAfterSpacebarDoesNotShowInstructions,
-                "frameUpdateAfterSpacebarDoesNotShowInstructions"},
+        {{runningTaskEntersEventLoop, "runningTaskEntersEventLoop"},
+            {taskFrameUpdateShowsInstructions,
+                "taskFrameUpdateShowsInstructions"},
+            {taskFrameUpdateAfterSpacebarDoesNotShowInstructions,
+                "taskFrameUpdateAfterSpacebarDoesNotShowInstructions"},
             {timerConstructorSubscribesToFrameUpdate,
                 "timerConstructorSubscribesToFrameUpdate"}},
         std::cout);

@@ -38,21 +38,21 @@ void testTask(const std::function<void(Task &, FrameworkStub &)> &f) {
 }
 }
 
-void taskEntersEventLoop(testcpplite::TestResult &result) {
+void runningTaskEntersEventLoop(testcpplite::TestResult &result) {
     testTask([&](Task &task, FrameworkStub &framework) {
         run(task);
         assertTrue(result, framework.eventLoopEntered());
     });
 }
 
-void frameUpdateShowsInstructions(testcpplite::TestResult &result) {
+void taskFrameUpdateShowsInstructions(testcpplite::TestResult &result) {
     testTask([&](Task &task, FrameworkStub &framework) {
         frameUpdate(task);
         assertEqual(result, instructions, framework.displayedText());
     });
 }
 
-void frameUpdateAfterSpacebarDoesNotShowInstructions(
+void taskFrameUpdateAfterSpacebarDoesNotShowInstructions(
     testcpplite::TestResult &result) {
     testTask([&](Task &task, FrameworkStub &framework) {
         keyPressed(task, ' ');

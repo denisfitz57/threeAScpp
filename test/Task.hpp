@@ -4,9 +4,9 @@
 #include <testcpplite/testcpplite.hpp>
 
 namespace three_as {
-void taskEntersEventLoop(testcpplite::TestResult &result);
-void frameUpdateShowsInstructions(testcpplite::TestResult &result);
-void frameUpdateAfterSpacebarDoesNotShowInstructions(
+void runningTaskEntersEventLoop(testcpplite::TestResult &result);
+void taskFrameUpdateShowsInstructions(testcpplite::TestResult &result);
+void taskFrameUpdateAfterSpacebarDoesNotShowInstructions(
     testcpplite::TestResult &result);
 }
 
