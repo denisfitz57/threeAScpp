@@ -1,0 +1,3 @@
+#ifndef THREEAS_TEST_TIMER_HPP_
+#define THREEAS_TEST_TIMER_HPP_
+#endif
