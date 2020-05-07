@@ -17,11 +17,13 @@ class Framework {
 
 class Task {
   public:
-    void runTask(Framework &);
-    void frameUpdate(Framework &);
-    void keyPressed(Framework &, int key);
+    explicit Task(Framework &);
+    void run();
+    void frameUpdate();
+    void keyPressed(int key);
 
   private:
+    Framework &framework;
     bool keyPressed_{};
 };
 }

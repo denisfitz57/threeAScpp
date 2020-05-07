@@ -1,12 +1,14 @@
 #include "threeAS-task.hpp"
 
 namespace three_as {
-void Task::runTask(Framework &framework) { framework.eventLoop(); }
+Task::Task(Framework &framework) : framework{framework} {}
 
-void Task::frameUpdate(Framework &framework) {
+void Task::run() { framework.eventLoop(); }
+
+void Task::frameUpdate() {
     if (!keyPressed_)
         framework.display(instructions);
 }
 
-void Task::keyPressed(Framework &, int key) { keyPressed_ = true; }
+void Task::keyPressed(int key) { keyPressed_ = true; }
 }

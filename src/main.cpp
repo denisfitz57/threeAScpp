@@ -25,7 +25,7 @@ class OpenFrameworks : public Framework {
 
 void main() {
     OpenFrameworks framework;
-    runTask(framework);
+    run(framework);
 }
 }
 }

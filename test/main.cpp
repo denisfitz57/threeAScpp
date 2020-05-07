@@ -24,36 +24,36 @@ class FrameworkStub : public Framework {
     bool eventLoopEntered_{};
 };
 
-void runTask(Task &task, Framework &framework) { task.runTask(framework); }
+void run(Task &task) { task.run(); }
 
-void frameUpdate(Task &task, Framework &framework) {
-    task.frameUpdate(framework);
+void frameUpdate(Task &task) {
+    task.frameUpdate();
 }
 
-void keyPressed(Task &task, Framework &framework, int key) {
-    task.keyPressed(framework, key);
+void keyPressed(Task &task, int key) {
+    task.keyPressed(key);
 }
 
 void taskEntersEventLoop(testcpplite::TestResult &result) {
-    Task task;
     FrameworkStub framework;
-    runTask(task, framework);
+    Task task{framework};
+    run(task);
     assertTrue(result, framework.eventLoopEntered());
 }
 
 void frameUpdateShowsInstructions(testcpplite::TestResult &result) {
-    Task task;
     FrameworkStub framework;
-    frameUpdate(task, framework);
+    Task task{framework};
+    frameUpdate(task);
     assertEqual(result, instructions, framework.displayedText());
 }
 
 void frameUpdateAfterSpacebarDoesNotShowInstructions(
     testcpplite::TestResult &result) {
-    Task task;
     FrameworkStub framework;
-    keyPressed(task, framework, ' ');
-    frameUpdate(task, framework);
+    Task task{framework};
+    keyPressed(task, ' ');
+    frameUpdate(task);
     assertFalse(result, framework.textDisplayed());
 }
 }
