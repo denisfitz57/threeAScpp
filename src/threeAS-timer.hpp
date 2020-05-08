@@ -17,7 +17,7 @@ class MonotonicTimer {
 class Timer {
   public:
     Timer(MonotonicTimer &);
-    void frameUpdate();
+    void check();
     void invokeAfter(std::chrono::milliseconds, std::function<void()>);
 
   private:

@@ -4,7 +4,7 @@
 namespace three_as {
 Timer::Timer(MonotonicTimer &monotonic) : monotonic{monotonic} {}
 
-void Timer::frameUpdate() {
+void Timer::check() {
     if (running && monotonic.elapsed() >= timeToWait) {
         running = false;
         callback();

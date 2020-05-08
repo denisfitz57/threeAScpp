@@ -29,7 +29,7 @@ void testTimer(const std::function<void(Timer &, MonotonicTimerStub &)> &f) {
     f(timer, monotonic);
 }
 
-void frameUpdate(Timer &s) { s.frameUpdate(); }
+void check(Timer &s) { s.check(); }
 
 void invokeAfter(
     Timer &timer, std::chrono::milliseconds s, std::function<void()> f) {
@@ -46,7 +46,7 @@ auto timerCallsAfterWhenElapsed(Timer &timer, MonotonicTimerStub &monotonic,
     bool called{};
     invokeAfter(timer, after, [&]() { called = true; });
     setElapsed(monotonic, elapsed);
-    frameUpdate(timer);
+    check(timer);
     return called;
 }
 }
@@ -78,8 +78,8 @@ void timerInvokeAfterDoesNotCallsbackTwice(testcpplite::TestResult &result) {
         int count{};
         invokeAfter(timer, 1ms, [&]() { ++count; });
         setElapsed(monotonic, 1ms);
-        frameUpdate(timer);
-        frameUpdate(timer);
+        check(timer);
+        check(timer);
         assertEqual(result, 1, count);
     });
 }
@@ -97,9 +97,9 @@ void timerInvokeAfterInCallback(testcpplite::TestResult &result) {
         invokeAfter(timer, 1ms,
             [&]() { invokeAfter(timer, 1ms, [&]() { called = true; }); });
         setElapsed(monotonic, 1ms);
-        frameUpdate(timer);
+        check(timer);
         assertFalse(result, called);
-        frameUpdate(timer);
+        check(timer);
         assertTrue(result, called);
     });
 }
