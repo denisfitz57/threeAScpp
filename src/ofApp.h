@@ -4,10 +4,7 @@
 #include "threeAS-SteadyClock.hpp"
 #include "ofMain.h"
 #include "ofxCsv.h"
-#include <algorithm>
 #include <vector>
-
-const int numRows = 200;
 
 class ofApp : public ofBaseApp {
   public:
@@ -18,25 +15,23 @@ class ofApp : public ofBaseApp {
     void keyPressed(int key) override;
 
   private:
+    static constexpr auto numRows{200};
     three_as::SteadyClock clock;
     three_as::Timer timer{clock};
     ofxCsv csv, csvtmp;
     ofImage pic, stim, blank;
     int actualNumRows;
     std::vector<int> permvec;
-    string picture[numRows], stimulus[numRows];
-    int correctresponse[numRows], distance[numRows], emotion[numRows],
-        correct[numRows];
-    char answer[numRows];
-    double RT[numRows];
+    std::string picture[numRows];
+    std::string stimulus[numRows];
+    int correctresponse[numRows];
+    int distance[numRows];
+    int emotion[numRows];
     int rowCount = 0;
     bool readyForNext = true;
-    bool stimflag = true;
     bool FirstPicFlag = false;
     bool noMore = true;
     bool init = true;
-
-    int bgcolor = 128; // black = 0, 128 gray, 255 white;
     char threekey =
         '3'; // changing this may require a change to instructionText below
     char fourkey = '4';
@@ -46,6 +41,7 @@ class ofApp : public ofBaseApp {
     string instructionText =
         "Press the number keys 3, 4, 5, or 6 according to\n\nHOW MANY numbers "
         "you see.\n\nPress space to begin.";
-    int saveTime, stimTime, respTime;
+    int stimTime;
+    int respTime;
     ofRectangle bounds;
 };

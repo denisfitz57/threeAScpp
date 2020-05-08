@@ -5,8 +5,6 @@
 #include <functional>
 
 namespace three_as {
-struct Interval {};
-
 class MonotonicTimer {
   public:
     virtual ~MonotonicTimer() = default;

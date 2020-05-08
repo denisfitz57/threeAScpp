@@ -1,5 +1,5 @@
 #include "ofApp.h"
-
+#include <algorithm>
 #include <random>
 
 using std::literals::chrono_literals::operator""ms;
@@ -14,8 +14,6 @@ void ofApp::setup() {
     verdana14.load("verdana.ttf", 14, true, true);
     verdana14.setLineHeight(18.0f);
     verdana14.setLetterSpacing(1.037);
-    string instructionText = "Press the number keys 3, 4, 5, or 6 \naccording "
-                             "to HOW MANY numbers you see.";
 
     ofSetLogLevel("ofxCsv", OF_LOG_VERBOSE); // See what's going on inside.
     csvtmp.load("3as.csv");
@@ -48,6 +46,11 @@ void ofApp::update() {
     }
 }
 
+static void draw(ofImage &image) {
+    image.draw(ofGetWidth() / 4, ofGetHeight() / 4, ofGetWidth() / 2,
+        ofGetHeight() / 2);
+}
+
 void ofApp::draw() {
     if (init) {
         ofRectangle rect =
@@ -56,19 +59,15 @@ void ofApp::draw() {
             ofGetHeight() / 2 - rect.height / 2);
     } else if (FirstPicFlag) {
         FirstPicFlag = false;
-        stimflag = true;
         timer.invokeAfter(0ms, [&]() {
-            pic.draw(ofGetWidth() / 4, ofGetHeight() / 4, ofGetWidth() / 2,
-                ofGetHeight() / 2);
+            ::draw(pic);
             timer.invokeAfter(firstPictureDuration, [&]() {
-                stim.draw(ofGetWidth() / 4, ofGetHeight() / 4, ofGetWidth() / 2,
-                    ofGetHeight() / 2);
+                stimTime = ofGetSystemTimeMillis();
+                ::draw(stim);
                 timer.invokeAfter(stimulusDuration, [&]() {
-                    pic.draw(ofGetWidth() / 4, ofGetHeight() / 4,
-                        ofGetWidth() / 2, ofGetHeight() / 2);
+                    ::draw(pic);
                     timer.invokeAfter(secondPictureDuration, [&]() {
-                        blank.draw(ofGetWidth() / 4, ofGetHeight() / 4,
-                            ofGetWidth() / 2, ofGetHeight() / 2);
+                        ::draw(blank);
                         timer.invokeAfter(blankDuration, [&]() {
                             rowCount += 1;
                             readyForNext = true;

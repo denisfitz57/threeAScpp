@@ -3,6 +3,7 @@ project(threeAS)
 
 add_library(threeAS src/Task.cpp src/Timer.cpp src/SteadyClock.cpp)
 set_target_properties(threeAS PROPERTIES OUTPUT_NAME "threeAS")
+target_compile_options(threeAS PRIVATE ${THREEAS_WARNINGS})
 target_include_directories(
   threeAS
   PUBLIC src
@@ -26,6 +27,7 @@ add_executable(
   src/main.cpp src/ofApp.cpp ${OPENFRAMEWORKS_CSV_ROOT}/src/ofxCsv.cpp
   ${OPENFRAMEWORKS_CSV_ROOT}/src/ofxCsvRow.cpp)
 set_target_properties(main PROPERTIES OUTPUT_NAME "threeAS")
+target_compile_options(main PRIVATE ${THREEAS_WARNINGS})
 set(OPENFRAMEWORKS_LIBS ${OPENFRAMEWORKS_ROOT}/libs)
 set(OPENFRAMEWORKS_GLEW ${OPENFRAMEWORKS_LIBS}/glew)
 set(OPENFRAMEWORKS_TESS2 ${OPENFRAMEWORKS_LIBS}/tess2)
