@@ -10,6 +10,7 @@ void timerInvokeAfterDoesNotCallsbackWhenNotTime(testcpplite::TestResult &);
 void timerInvokeAfterCallsbackWhenPastTime(testcpplite::TestResult &);
 void timerInvokeAfterDoesNotCallsbackTwice(testcpplite::TestResult &);
 void timerInvokeAfterStartsMonotonic(testcpplite::TestResult &);
+void timerInvokeAfterInCallback(testcpplite::TestResult &);
 }
 
 #endif

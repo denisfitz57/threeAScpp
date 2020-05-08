@@ -22,7 +22,8 @@ int main() {
             {timerInvokeAfterDoesNotCallsbackTwice,
                 "timerInvokeAfterDoesNotCallsbackTwice"},
             {timerInvokeAfterStartsMonotonic,
-                "timerInvokeAfterStartsMonotonic"}},
+                "timerInvokeAfterStartsMonotonic"},
+            {timerInvokeAfterInCallback, "timerInvokeAfterInCallback"}},
         std::cout);
 }
 }
