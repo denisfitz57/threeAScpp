@@ -2,8 +2,8 @@
 
 #include "threeAS-Timer.hpp"
 #include "threeAS-SteadyClock.hpp"
-#include "ofMain.h"
-#include "ofxCsv.h"
+#include <ofMain.h>
+#include <ofxCsv.h>
 #include <vector>
 
 class ofApp : public ofBaseApp {
@@ -15,25 +15,23 @@ class ofApp : public ofBaseApp {
     void keyPressed(int key) override;
 
   private:
-    static constexpr auto numRows{200};
+    ofxCsv csv;
+    ofImage pic;
+    ofImage stim;
+    ofImage blank;
+    ofRectangle bounds;
+    ofTrueTypeFont verdana14;
     three_as::SteadyClock clock;
     three_as::Timer timer{clock};
-    ofxCsv csv, csvtmp;
-    ofImage pic, stim, blank;
-    ofTrueTypeFont verdana14;
-    std::vector<int> permvec;
+    static constexpr auto numRows{200};
     std::string picture[numRows];
     std::string stimulus[numRows];
-    int actualNumRows;
     int correctresponse[numRows];
-    int distance[numRows];
-    int emotion[numRows];
+    int actualNumRows;
     int rowCount = 0;
+    int stimTime;
     bool readyForNext = true;
     bool FirstPicFlag = false;
     bool noMore = true;
     bool init = true;
-    int stimTime;
-    int respTime;
-    ofRectangle bounds;
 };

@@ -24,8 +24,10 @@ void ofApp::setup() {
     verdana14.setLetterSpacing(1.037);
 
     ofSetLogLevel("ofxCsv", OF_LOG_VERBOSE); // See what's going on inside.
+    ofxCsv csvtmp;
     csvtmp.load("3as.csv");
     actualNumRows = csvtmp.getNumRows() - 1;
+    std::vector<int> permvec;
     for (int i = 0; i < actualNumRows; i++)
         permvec.push_back(i);
     std::shuffle(
@@ -34,6 +36,8 @@ void ofApp::setup() {
     for (int i = 0; i < actualNumRows; i++) {
         csv.addRow(csvtmp.getRow(permvec[i] + 1));
     }
+    int emotion[numRows];
+    int distance[numRows];
     for (int i = 0; i < csv.getNumRows() - 1; i++) { //-1 to account for header
         for (int j = 0; j < csv.getNumCols(i); j++) {
             picture[i] = ofTrim(csv[i + 1][0]);
@@ -102,7 +106,7 @@ void ofApp::keyPressed(int key) {
     }
     if (key == threekey && noMore) {
         noMore = false;
-        respTime = ofGetSystemTimeMillis() - stimTime;
+        int respTime = ofGetSystemTimeMillis() - stimTime;
         mystr = threekey;
         csv[rowCount + 1][5] = mystr;
         csv[rowCount + 1][6] = std::to_string(respTime);
@@ -111,7 +115,7 @@ void ofApp::keyPressed(int key) {
     }
     if (key == fourkey && noMore) {
         noMore = false;
-        respTime = ofGetSystemTimeMillis() - stimTime;
+        int respTime = ofGetSystemTimeMillis() - stimTime;
         mystr = fourkey;
         csv[rowCount + 1][5] = mystr;
         csv[rowCount + 1][6] = std::to_string(respTime);
@@ -120,7 +124,7 @@ void ofApp::keyPressed(int key) {
     }
     if (key == fivekey && noMore) {
         noMore = false;
-        respTime = ofGetSystemTimeMillis() - stimTime;
+        int respTime = ofGetSystemTimeMillis() - stimTime;
         mystr = fivekey;
         csv[rowCount + 1][5] = mystr;
         csv[rowCount + 1][6] = std::to_string(respTime);
@@ -129,7 +133,7 @@ void ofApp::keyPressed(int key) {
     }
     if (key == sixkey && noMore) {
         noMore = false;
-        respTime = ofGetSystemTimeMillis() - stimTime;
+        int respTime = ofGetSystemTimeMillis() - stimTime;
         mystr = sixkey;
         csv[rowCount + 1][5] = mystr;
         csv[rowCount + 1][6] = std::to_string(respTime);
