@@ -8,6 +8,7 @@ void runningTaskEntersEventLoop(testcpplite::TestResult &result);
 void taskFrameUpdateShowsInstructions(testcpplite::TestResult &result);
 void taskFrameUpdateAfterSpacebarDoesNotShowInstructions(
     testcpplite::TestResult &result);
+void taskConstructorSubscribesToEvents(testcpplite::TestResult &result);
 }
 
 #endif

@@ -10,12 +10,17 @@ constexpr auto instructions{
 
 class Framework {
   public:
+    class Listener {
+      public:
+        virtual ~Listener() = default;
+    };
     virtual ~Framework() = default;
+    virtual void subscribe(Listener *) = 0;
     virtual void eventLoop() = 0;
     virtual void display(const std::string &) = 0;
 };
 
-class Task {
+class Task : public Framework::Listener {
   public:
     explicit Task(Framework &);
     void run();

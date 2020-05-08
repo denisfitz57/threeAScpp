@@ -19,8 +19,13 @@ class FrameworkStub : public Framework {
 
     auto textDisplayed() const -> bool { return textDisplayed_; }
 
+    auto listener() -> Listener * { return listener_; }
+
+    void subscribe(Listener *s) { listener_ = s; }
+
   private:
     std::string displayedText_;
+    Listener *listener_{};
     bool textDisplayed_{};
     bool eventLoopEntered_{};
 };
@@ -36,6 +41,12 @@ void testTask(const std::function<void(Task &, FrameworkStub &)> &f) {
     Task task{framework};
     f(task, framework);
 }
+}
+
+void taskConstructorSubscribesToEvents(testcpplite::TestResult &result) {
+    testTask([&](Task &task, FrameworkStub &framework) {
+        assertTrue(result, &task == framework.listener());
+    });
 }
 
 void runningTaskEntersEventLoop(testcpplite::TestResult &result) {

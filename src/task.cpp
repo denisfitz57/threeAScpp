@@ -1,7 +1,9 @@
 #include "threeAS-Task.hpp"
 
 namespace three_as {
-Task::Task(Framework &framework) : framework{framework} {}
+Task::Task(Framework &framework) : framework{framework} {
+    framework.subscribe(this);
+}
 
 void Task::run() { framework.eventLoop(); }
 
