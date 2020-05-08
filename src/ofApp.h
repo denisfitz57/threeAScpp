@@ -5,6 +5,8 @@
 #include <ofMain.h>
 #include <ofxCsv.h>
 #include <vector>
+#include <string>
+#include <array>
 
 class ofApp : public ofBaseApp {
   public:
@@ -24,12 +26,12 @@ class ofApp : public ofBaseApp {
     three_as::SteadyClock clock;
     three_as::Timer timer{clock};
     static constexpr auto numRows{200};
-    std::string picture[numRows];
-    std::string stimulus[numRows];
-    int correctresponse[numRows];
+    std::array<std::string, numRows> picture;
+    std::array<std::string, numRows> stimulus;
+    std::array<int, numRows> correctresponse;
+    uint64_t stimTime;
     int actualNumRows;
     int rowCount = 0;
-    int stimTime;
     bool readyForNext = true;
     bool FirstPicFlag = false;
     bool noMore = true;

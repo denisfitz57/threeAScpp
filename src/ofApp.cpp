@@ -8,14 +8,14 @@ constexpr auto firstPictureDuration{400ms};
 constexpr auto stimulusDuration{400ms};
 constexpr auto secondPictureDuration{400ms};
 constexpr auto blankDuration{1300ms};
-constexpr auto threekey =
-    '3'; // changing this may require a change to instructionText below
-constexpr auto fourkey = '4';
-constexpr auto fivekey = '5';
-constexpr auto sixkey = '6';
-constexpr auto instructionText =
+// changing these may require a change to instructionText below
+constexpr int threekey{'3'};
+constexpr int fourkey{'4'};
+constexpr int fivekey{'5'};
+constexpr int sixkey{'6'};
+constexpr auto instructionText{
     "Press the number keys 3, 4, 5, or 6 according to\n\nHOW MANY numbers "
-    "you see.\n\nPress space to begin.";
+    "you see.\n\nPress space to begin."};
 
 void ofApp::setup() {
     ofSetFrameRate(60);
@@ -27,24 +27,17 @@ void ofApp::setup() {
     ofxCsv csvtmp;
     csvtmp.load("3as.csv");
     actualNumRows = csvtmp.getNumRows() - 1;
-    std::vector<int> permvec;
-    for (int i = 0; i < actualNumRows; i++)
-        permvec.push_back(i);
-    std::shuffle(
-        permvec.begin(), permvec.end(), std::mt19937(std::random_device()()));
-    csv.addRow(csvtmp.getRow(0));
-    for (int i = 0; i < actualNumRows; i++) {
-        csv.addRow(csvtmp.getRow(permvec[i] + 1));
-    }
-    int emotion[numRows];
-    int distance[numRows];
+    std::vector<int> permvec(csvtmp.getNumRows());
+    std::iota(permvec.begin(), permvec.end(), 0);
+    std::shuffle(std::next(permvec.begin()), permvec.end(),
+        std::mt19937(std::random_device()()));
+    for (auto index : permvec)
+        csv.addRow(csvtmp.getRow(index));
     for (int i = 0; i < csv.getNumRows() - 1; i++) { //-1 to account for header
         for (int j = 0; j < csv.getNumCols(i); j++) {
-            picture[i] = ofTrim(csv[i + 1][0]);
-            stimulus[i] = ofTrim(csv[i + 1][1]);
-            correctresponse[i] = stoi(ofTrim(csv[i + 1][2]));
-            distance[i] = stoi(ofTrim(csv[i + 1][3]));
-            emotion[i] = stoi(ofTrim(csv[i + 1][4]));
+            picture.at(i) = ofTrim(csv.at(i + 1).at(0));
+            stimulus.at(i) = ofTrim(csv.at(i + 1).at(1));
+            correctresponse.at(i) = std::stoi(ofTrim(csv.at(i + 1).at(2)));
         }
     }
     blank.load("blank.png");
@@ -52,8 +45,8 @@ void ofApp::setup() {
 
 void ofApp::update() {
     if (readyForNext) {
-        pic.load(picture[rowCount]);
-        stim.load(stimulus[rowCount]);
+        pic.load(picture.at(rowCount));
+        stim.load(stimulus.at(rowCount));
         readyForNext = false;
     }
 }
@@ -65,8 +58,7 @@ static void draw(ofImage &image) {
 
 void ofApp::draw() {
     if (init) {
-        ofRectangle rect =
-            verdana14.getStringBoundingBox(instructionText, 0, 0);
+        const auto rect{verdana14.getStringBoundingBox(instructionText, 0, 0)};
         verdana14.drawString(instructionText, ofGetWidth() / 2 - rect.width / 2,
             ofGetHeight() / 2 - rect.height / 2);
     } else if (FirstPicFlag) {
@@ -97,53 +89,38 @@ void ofApp::draw() {
     timer.check();
 }
 
+constexpr auto keyValue(int c) -> int {
+    switch (c) {
+    case threekey:
+        return 3;
+    case fourkey:
+        return 4;
+    case fivekey:
+        return 5;
+    default:
+        return 6;
+    }
+}
+
 void ofApp::keyPressed(int key) {
-    string mystr;
     if (key == ' ') {
         init = false;
         FirstPicFlag = true;
         ofSetBackgroundAuto(false);
     }
-    if (key == threekey && noMore) {
+    if ((key == threekey || key == fourkey || key == fivekey ||
+            key == sixkey) &&
+        noMore) {
         noMore = false;
-        int respTime = ofGetSystemTimeMillis() - stimTime;
-        mystr = threekey;
-        csv[rowCount + 1][5] = mystr;
-        csv[rowCount + 1][6] = std::to_string(respTime);
-        csv[rowCount + 1][7] =
-            std::to_string(correctresponse[rowCount] == 3 - 2);
-    }
-    if (key == fourkey && noMore) {
-        noMore = false;
-        int respTime = ofGetSystemTimeMillis() - stimTime;
-        mystr = fourkey;
-        csv[rowCount + 1][5] = mystr;
-        csv[rowCount + 1][6] = std::to_string(respTime);
-        csv[rowCount + 1][7] =
-            std::to_string(correctresponse[rowCount] == 4 - 2);
-    }
-    if (key == fivekey && noMore) {
-        noMore = false;
-        int respTime = ofGetSystemTimeMillis() - stimTime;
-        mystr = fivekey;
-        csv[rowCount + 1][5] = mystr;
-        csv[rowCount + 1][6] = std::to_string(respTime);
-        csv[rowCount + 1][7] =
-            std::to_string(correctresponse[rowCount] == 5 - 2);
-    }
-    if (key == sixkey && noMore) {
-        noMore = false;
-        int respTime = ofGetSystemTimeMillis() - stimTime;
-        mystr = sixkey;
-        csv[rowCount + 1][5] = mystr;
-        csv[rowCount + 1][6] = std::to_string(respTime);
-        csv[rowCount + 1][7] =
-            std::to_string(correctresponse[rowCount] == 6 - 2);
+        csv.at(rowCount + 1).at(5) = std::to_string(key);
+        csv.at(rowCount + 1).at(6) =
+            std::to_string(ofGetSystemTimeMillis() - stimTime);
+        csv.at(rowCount + 1).at(7) = std::to_string(static_cast<int>(
+            correctresponse.at(rowCount) == keyValue(key) - 2));
     }
 }
 
 void ofApp::exit() {
-    string filetime = "AS3out" + ofGetTimestampString() + ".csv";
-    csv.save(filetime);
+    csv.save("AS3out" + ofGetTimestampString() + ".csv");
     ofLog() << "exit";
 }
