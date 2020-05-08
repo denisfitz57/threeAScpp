@@ -21,7 +21,11 @@ class FrameworkStub : public Framework {
 
     auto listener() -> Listener * { return listener_; }
 
-    void subscribe(Listener *s) { listener_ = s; }
+    void subscribe(Listener *s) override { listener_ = s; }
+
+    void frameUpdate() { listener_->frameUpdate(); }
+
+    void keyPressed(int c) { listener_->keyPressed(c); }
 
   private:
     std::string displayedText_;
@@ -32,9 +36,11 @@ class FrameworkStub : public Framework {
 
 void run(Task &task) { task.run(); }
 
-void frameUpdate(Task &task) { task.frameUpdate(); }
+void frameUpdate(FrameworkStub &framework) { framework.frameUpdate(); }
 
-void keyPressed(Task &task, int key) { task.keyPressed(key); }
+void keyPressed(FrameworkStub &framework, int key) {
+    framework.keyPressed(key);
+}
 
 void testTask(const std::function<void(Task &, FrameworkStub &)> &f) {
     FrameworkStub framework;
@@ -57,17 +63,17 @@ void runningTaskEntersEventLoop(testcpplite::TestResult &result) {
 }
 
 void taskFrameUpdateShowsInstructions(testcpplite::TestResult &result) {
-    testTask([&](Task &task, FrameworkStub &framework) {
-        frameUpdate(task);
+    testTask([&](Task &, FrameworkStub &framework) {
+        frameUpdate(framework);
         assertEqual(result, instructions, framework.displayedText());
     });
 }
 
 void taskFrameUpdateAfterSpacebarDoesNotShowInstructions(
     testcpplite::TestResult &result) {
-    testTask([&](Task &task, FrameworkStub &framework) {
-        keyPressed(task, ' ');
-        frameUpdate(task);
+    testTask([&](Task &, FrameworkStub &framework) {
+        keyPressed(framework, ' ');
+        frameUpdate(framework);
         assertFalse(result, framework.textDisplayed());
     });
 }

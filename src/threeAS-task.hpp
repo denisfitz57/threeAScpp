@@ -13,6 +13,8 @@ class Framework {
     class Listener {
       public:
         virtual ~Listener() = default;
+        virtual void frameUpdate() = 0;
+        virtual void keyPressed(int key) = 0;
     };
     virtual ~Framework() = default;
     virtual void subscribe(Listener *) = 0;
@@ -24,8 +26,8 @@ class Task : public Framework::Listener {
   public:
     explicit Task(Framework &);
     void run();
-    void frameUpdate();
-    void keyPressed(int key);
+    void frameUpdate() override;
+    void keyPressed(int key) override;
 
   private:
     Framework &framework;
