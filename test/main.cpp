@@ -1,16 +1,11 @@
 #include "Timer.hpp"
-#include "Task.hpp"
 #include <testcpplite/testcpplite.hpp>
 #include <iostream>
 
 namespace three_as {
-int main() {
+static int main() {
     return testcpplite::test(
-        {{runningTaskEntersEventLoop, "runningTaskEntersEventLoop"},
-            {taskFrameUpdateShowsInstructions,
-                "taskFrameUpdateShowsInstructions"},
-            {taskFrameUpdateAfterSpacebarDoesNotShowInstructions,
-                "taskFrameUpdateAfterSpacebarDoesNotShowInstructions"},
+        {
             {timerInvokeAfterCallsbackWhenTime,
                 "timerInvokeAfterCallsbackWhenTime"},
             {timerInvokeAfterDoesNotCallsbackWhenNotTime,
@@ -22,8 +17,7 @@ int main() {
             {timerInvokeAfterStartsMonotonic,
                 "timerInvokeAfterStartsMonotonic"},
             {timerInvokeAfterInCallback, "timerInvokeAfterInCallback"},
-            {taskConstructorSubscribesToEvents,
-                "taskConstructorSubscribesToEvents"}},
+        },
         std::cout);
 }
 }

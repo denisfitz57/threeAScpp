@@ -112,7 +112,7 @@ void ofApp::keyPressed(int key) {
             key == sixkey) &&
         noMore) {
         noMore = false;
-        csv.at(rowCount + 1).at(5) = std::to_string(key);
+        csv.at(rowCount + 1).at(5) = static_cast<char>(key);
         csv.at(rowCount + 1).at(6) =
             std::to_string(ofGetSystemTimeMillis() - stimTime);
         csv.at(rowCount + 1).at(7) = std::to_string(static_cast<int>(
