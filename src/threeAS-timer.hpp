@@ -5,17 +5,6 @@
 #include <functional>
 
 namespace three_as {
-class Screen {
-  public:
-    class Listener {
-      public:
-        virtual ~Listener() = default;
-        virtual void frameUpdate() = 0;
-    };
-    virtual ~Screen() = default;
-    virtual void subscribe(Listener *) = 0;
-};
-
 struct Interval {};
 
 class MonotonicTimer {
@@ -25,10 +14,10 @@ class MonotonicTimer {
     virtual void start() = 0;
 };
 
-class Timer : public Screen::Listener {
+class Timer {
   public:
-    Timer(Screen &, MonotonicTimer &);
-    void frameUpdate() override;
+    Timer(MonotonicTimer &);
+    void frameUpdate();
     void invokeAfter(std::chrono::milliseconds, std::function<void()>);
 
   private:

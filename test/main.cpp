@@ -11,8 +11,6 @@ int main() {
                 "taskFrameUpdateShowsInstructions"},
             {taskFrameUpdateAfterSpacebarDoesNotShowInstructions,
                 "taskFrameUpdateAfterSpacebarDoesNotShowInstructions"},
-            {timerConstructorSubscribesToFrameUpdate,
-                "timerConstructorSubscribesToFrameUpdate"},
             {timerInvokeAfterCallsbackWhenTime,
                 "timerInvokeAfterCallsbackWhenTime"},
             {timerInvokeAfterDoesNotCallsbackWhenNotTime,

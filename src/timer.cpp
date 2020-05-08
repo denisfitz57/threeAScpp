@@ -2,9 +2,7 @@
 #include <utility>
 
 namespace three_as {
-Timer::Timer(Screen &screen, MonotonicTimer &monotonic) : monotonic{monotonic} {
-    screen.subscribe(this);
-}
+Timer::Timer(MonotonicTimer &monotonic) : monotonic{monotonic} {}
 
 void Timer::frameUpdate() {
     if (running && monotonic.elapsed() >= timeToWait) {

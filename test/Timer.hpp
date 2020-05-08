@@ -4,7 +4,6 @@
 #include <testcpplite/testcpplite.hpp>
 
 namespace three_as {
-void timerConstructorSubscribesToFrameUpdate(testcpplite::TestResult &);
 void timerInvokeAfterCallsbackWhenTime(testcpplite::TestResult &);
 void timerInvokeAfterDoesNotCallsbackWhenNotTime(testcpplite::TestResult &);
 void timerInvokeAfterCallsbackWhenPastTime(testcpplite::TestResult &);
