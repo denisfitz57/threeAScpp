@@ -120,7 +120,7 @@ void timerInvokeAfterInCallback(testcpplite::TestResult &result) {
         [&](Timer &timer, ScreenStub &screen, MonotonicTimerStub &monotonic) {
             bool called{};
             invokeAfter(timer, 1ms,
-                [&]() { timer.invokeAfter(1ms, [&]() { called = true; }); });
+                [&]() { invokeAfter(timer, 1ms, [&]() { called = true; }); });
             setElapsed(monotonic, 1ms);
             frameUpdate(screen);
             assertFalse(result, called);
