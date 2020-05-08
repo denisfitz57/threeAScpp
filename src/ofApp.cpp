@@ -8,6 +8,14 @@ constexpr auto firstPictureDuration{400ms};
 constexpr auto stimulusDuration{400ms};
 constexpr auto secondPictureDuration{400ms};
 constexpr auto blankDuration{1300ms};
+constexpr auto threekey =
+    '3'; // changing this may require a change to instructionText below
+constexpr auto fourkey = '4';
+constexpr auto fivekey = '5';
+constexpr auto sixkey = '6';
+constexpr auto instructionText =
+    "Press the number keys 3, 4, 5, or 6 according to\n\nHOW MANY numbers "
+    "you see.\n\nPress space to begin.";
 
 void ofApp::setup() {
     ofSetFrameRate(60);

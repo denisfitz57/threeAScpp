@@ -20,10 +20,11 @@ class ofApp : public ofBaseApp {
     three_as::Timer timer{clock};
     ofxCsv csv, csvtmp;
     ofImage pic, stim, blank;
-    int actualNumRows;
+    ofTrueTypeFont verdana14;
     std::vector<int> permvec;
     std::string picture[numRows];
     std::string stimulus[numRows];
+    int actualNumRows;
     int correctresponse[numRows];
     int distance[numRows];
     int emotion[numRows];
@@ -32,15 +33,6 @@ class ofApp : public ofBaseApp {
     bool FirstPicFlag = false;
     bool noMore = true;
     bool init = true;
-    char threekey =
-        '3'; // changing this may require a change to instructionText below
-    char fourkey = '4';
-    char fivekey = '5';
-    char sixkey = '6';
-    ofTrueTypeFont verdana14;
-    string instructionText =
-        "Press the number keys 3, 4, 5, or 6 according to\n\nHOW MANY numbers "
-        "you see.\n\nPress space to begin.";
     int stimTime;
     int respTime;
     ofRectangle bounds;
