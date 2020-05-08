@@ -2,7 +2,13 @@
 
 #include <random>
 
-//--------------------------------------------------------------
+using std::literals::chrono_literals::operator""ms;
+
+constexpr auto firstPictureDuration{400ms};
+constexpr auto stimulusDuration{400ms};
+constexpr auto secondPictureDuration{400ms};
+constexpr auto blankDuration{1300ms};
+
 void ofApp::setup() {
     ofSetFrameRate(60);
     verdana14.load("verdana.ttf", 14, true, true);
@@ -13,7 +19,6 @@ void ofApp::setup() {
 
     ofSetLogLevel("ofxCsv", OF_LOG_VERBOSE); // See what's going on inside.
     csvtmp.load("3as.csv");
-    saveTime = 1000000;
     actualNumRows = csvtmp.getNumRows() - 1;
     for (int i = 0; i < actualNumRows; i++)
         permvec.push_back(i);
@@ -35,7 +40,6 @@ void ofApp::setup() {
     blank.load("blank.png");
 }
 
-//--------------------------------------------------------------
 void ofApp::update() {
     if (readyForNext) {
         pic.load(picture[rowCount]);
@@ -44,83 +48,50 @@ void ofApp::update() {
     }
 }
 
-//--------------------------------------------------------------
 void ofApp::draw() {
-    if (saveTime + pic1dur + stimdur + pic2dur + endblankdur <
-        ofGetFrameNum()) {
-        saveTime = ofGetFrameNum();
-        // ofLog() << saveTime;
-        rowCount += 1;
-        // ofLog() << "inc rowcount\n";
-        readyForNext = true;
-        FirstPicFlag = true;
-        noMore = true;
-        if (rowCount >= actualNumRows - 1) {
-            ofExit();
-        }
-    } else if (saveTime + pic1dur + stimdur + pic2dur < ofGetFrameNum()) {
-        // ofLog() << ofGetFrameNum();
-        showBlank = true;
-        showPic1 = false;
-        showStim = false;
-        showPic2 = false;
-    } else if (saveTime + stimdur + pic1dur < ofGetFrameNum()) {
-        // ofLog() << ofGetFrameNum();
-        showPic2 = true;
-        showBlank = false;
-        showPic1 = false;
-        showStim = false;
-    } else if (saveTime + pic1dur < ofGetFrameNum()) {
-        // ofLog() << ofGetFrameNum();
-        showStim = true;
-        showPic1 = false;
-        showPic2 = false;
-        showBlank = false;
-        if (stimflag) {
-            stimTime = ofGetSystemTimeMillis();
-            stimflag = false;
-        }
-    } else if (saveTime < ofGetFrameNum()) {
-        if (FirstPicFlag) {
-            // ofLog() << ofGetFrameNum();
-            stimflag = true;
-            FirstPicFlag = false;
-            showPic1 = true;
-            showStim = false;
-            showPic2 = false;
-            showBlank = false;
-        }
-    } else {
-    }
-
-    if (showBlank) {
-        blank.draw(ofGetWidth() / 4, ofGetHeight() / 4, ofGetWidth() / 2,
-            ofGetHeight() / 2);
-    } else if (showPic2) {
-        pic.draw(ofGetWidth() / 4, ofGetHeight() / 4, ofGetWidth() / 2,
-            ofGetHeight() / 2);
-    } else if (showStim) {
-        stim.draw(ofGetWidth() / 4, ofGetHeight() / 4, ofGetWidth() / 2,
-            ofGetHeight() / 2);
-    } else if (showPic1) {
-        pic.draw(ofGetWidth() / 4, ofGetHeight() / 4, ofGetWidth() / 2,
-            ofGetHeight() / 2);
-    }
     if (init) {
         ofRectangle rect =
             verdana14.getStringBoundingBox(instructionText, 0, 0);
-        // ofDrawRectangle(rect.x, rect.y, rect.width, rect.height);
         verdana14.drawString(instructionText, ofGetWidth() / 2 - rect.width / 2,
             ofGetHeight() / 2 - rect.height / 2);
+    } else if (FirstPicFlag) {
+        FirstPicFlag = false;
+        stimflag = true;
+        timer.invokeAfter(0ms, [&]() {
+            pic.draw(ofGetWidth() / 4, ofGetHeight() / 4, ofGetWidth() / 2,
+                ofGetHeight() / 2);
+            timer.invokeAfter(firstPictureDuration, [&]() {
+                stim.draw(ofGetWidth() / 4, ofGetHeight() / 4, ofGetWidth() / 2,
+                    ofGetHeight() / 2);
+                timer.invokeAfter(stimulusDuration, [&]() {
+                    pic.draw(ofGetWidth() / 4, ofGetHeight() / 4,
+                        ofGetWidth() / 2, ofGetHeight() / 2);
+                    timer.invokeAfter(secondPictureDuration, [&]() {
+                        blank.draw(ofGetWidth() / 4, ofGetHeight() / 4,
+                            ofGetWidth() / 2, ofGetHeight() / 2);
+                        timer.invokeAfter(blankDuration, [&]() {
+                            rowCount += 1;
+                            readyForNext = true;
+                            FirstPicFlag = true;
+                            noMore = true;
+                            if (rowCount >= actualNumRows - 1) {
+                                ofExit();
+                            }
+                        });
+                    });
+                });
+            });
+        });
     }
+    timer.check();
 }
 
-//--------------------------------------------------------------
 void ofApp::keyPressed(int key) {
     string mystr;
     if (key == ' ') {
-        saveTime = ofGetFrameNum() + 6;
         init = false;
+        FirstPicFlag = true;
+        ofSetBackgroundAuto(false);
     }
     if (key == threekey && noMore) {
         noMore = false;
@@ -165,32 +136,3 @@ void ofApp::exit() {
     csv.save(filetime);
     ofLog() << "exit";
 }
-//--------------------------------------------------------------
-void ofApp::keyReleased(int key) {}
-
-//--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y) {}
-
-//--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button) {}
-
-//--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button) {}
-
-//--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button) {}
-
-//--------------------------------------------------------------
-void ofApp::mouseEntered(int x, int y) {}
-
-//--------------------------------------------------------------
-void ofApp::mouseExited(int x, int y) {}
-
-//--------------------------------------------------------------
-void ofApp::windowResized(int w, int h) {}
-
-//--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg) {}
-
-//--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo) {}

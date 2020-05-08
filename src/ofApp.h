@@ -1,5 +1,7 @@
 #pragma once
 
+#include "threeAS-Timer.hpp"
+#include "threeAS-SteadyClock.hpp"
 #include "ofMain.h"
 #include "ofxCsv.h"
 #include <algorithm>
@@ -8,24 +10,16 @@
 const int numRows = 200;
 
 class ofApp : public ofBaseApp {
-
   public:
     void setup() override;
     void update() override;
     void draw() override;
     void exit() override;
-
     void keyPressed(int key) override;
-    void keyReleased(int key) override;
-    void mouseMoved(int x, int y) override;
-    void mouseDragged(int x, int y, int button) override;
-    void mousePressed(int x, int y, int button) override;
-    void mouseReleased(int x, int y, int button) override;
-    void mouseEntered(int x, int y) override;
-    void mouseExited(int x, int y) override;
-    void windowResized(int w, int h) override;
-    void dragEvent(ofDragInfo dragInfo) override;
-    void gotMessage(ofMessage msg) override;
+
+  private:
+    three_as::SteadyClock clock;
+    three_as::Timer timer{clock};
     ofxCsv csv, csvtmp;
     ofImage pic, stim, blank;
     int actualNumRows;
@@ -36,20 +30,12 @@ class ofApp : public ofBaseApp {
     char answer[numRows];
     double RT[numRows];
     int rowCount = 0;
-    bool readyForNext = true, stimflag = true, FirstPicFlag = true,
-         noMore = true;
-    bool showPic1 = false, showStim = false, showPic2 = false,
-         showBlank = false;
+    bool readyForNext = true;
+    bool stimflag = true;
+    bool FirstPicFlag = false;
+    bool noMore = true;
     bool init = true;
 
-    // int pic1dur = 400;  //in msec
-    // int stimdur = 400;
-    // int pic2dur = 400;
-    // int endblankdur = 1300;
-    uint64_t pic1dur = 24; // in frames
-    uint64_t stimdur = 24;
-    uint64_t pic2dur = 24;
-    uint64_t endblankdur = 78;
     int bgcolor = 128; // black = 0, 128 gray, 255 white;
     char threekey =
         '3'; // changing this may require a change to instructionText below

@@ -13,7 +13,7 @@ class OpenFrameworks : public Framework {
         verdana14.setLetterSpacing(1.037);
     }
 
-    void eventLoop() override { ofRunApp(new ofApp()); }
+    void eventLoop() override { ofRunApp(&app); }
 
     void display(const std::string &s) override {
         const auto rect{verdana14.getStringBoundingBox(s, 0, 0)};
@@ -24,6 +24,7 @@ class OpenFrameworks : public Framework {
     void subscribe(Listener *s) override { listener = s; }
 
   private:
+    ofApp app;
     ofTrueTypeFont verdana14;
     Listener *listener{};
 };
