@@ -21,8 +21,11 @@ class OpenFrameworks : public Framework {
             ofGetHeight() / 2 - rect.height / 2);
     }
 
+    void subscribe(Listener *s) override { listener = s; }
+
   private:
     ofTrueTypeFont verdana14;
+    Listener *listener{};
 };
 
 void main() {
